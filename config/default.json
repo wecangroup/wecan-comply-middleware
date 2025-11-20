@@ -1,0 +1,20 @@
+{
+  "server": {
+    "port": 3000,
+    "host": "0.0.0.0"
+  },
+  "wecanComply": {
+    "workspaceUrlTemplate": "https://{workspaceUuid}.int.wecancomply.ch",
+    "timeoutMs": 30000,
+    "retries": 2
+  },
+  "logging": {
+    "level": "info",
+    "format": "json"
+  },
+  "cors": {
+    "enabled": true,
+    "origin": "*"
+  }
+}
+
