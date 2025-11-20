@@ -188,5 +188,55 @@ router.get('/:workspaceUuid/network', async (req: Request, res: Response) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/workspaces/{workspaceUuid}/push-categories:
+ *   get:
+ *     summary: Get push categories for a workspace
+ *     description: Retrieves push categories with their template UUIDs, optionally filtered by template type
+ *     tags: [Workspaces]
+ *     parameters:
+ *       - $ref: '#/components/parameters/WorkspaceUuid'
+ *       - name: template_type
+ *         in: query
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Optional filter by template type
+ *     responses:
+ *       200:
+ *         description: Push categories retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/PushCategory'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.get('/:workspaceUuid/push-categories', async (req: Request, res: Response) => {
+  try {
+    const { workspaceUuid } = req.params;
+    const { template_type } = req.query;
+    const client = await getSDKClient();
+    const pushCategories = await client.getPushCategories(
+      workspaceUuid,
+      template_type as string | undefined
+    );
+    res.json(pushCategories);
+  } catch (error: any) {
+    logger.error('Error getting push categories:', error);
+    res.status(error?.response?.status || 500).json({
+      error: 'Failed to get push categories',
+      message: error.message,
+    });
+  }
+});
+
 export default router;
 

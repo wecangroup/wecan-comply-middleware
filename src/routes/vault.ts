@@ -343,5 +343,170 @@ router.post('/:workspaceUuid/vaults/:vaultId/unlock', async (req: Request, res: 
   }
 });
 
+/**
+ * @swagger
+ * /api/workspaces/{workspaceUuid}/vaults:
+ *   post:
+ *     summary: Create a new vault
+ *     description: Creates a new vault with push forms and relations
+ *     tags: [Vaults]
+ *     parameters:
+ *       - $ref: '#/components/parameters/WorkspaceUuid'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the vault
+ *               template_type:
+ *                 type: string
+ *                 description: Type of template to use
+ *               push_category_uuid:
+ *                 type: string
+ *                 description: UUID of the push category
+ *               relation_uuids:
+ *                 type: array
+ *                 description: List of relation UUIDs to associate with the vault
+ *                 items:
+ *                   type: string
+ *             required:
+ *               - name
+ *               - template_type
+ *               - push_category_uuid
+ *               - relation_uuids
+ *           example:
+ *             name: "My New Vault"
+ *             template_type: "compliance"
+ *             push_category_uuid: "category-uuid"
+ *             relation_uuids: ["relation-uuid-1", "relation-uuid-2"]
+ *     responses:
+ *       200:
+ *         description: Vault created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Vault'
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.post('/:workspaceUuid/vaults', async (req: Request, res: Response) => {
+  try {
+    const { workspaceUuid } = req.params;
+    const { name, template_type, push_category_uuid, relation_uuids } = req.body;
+
+    if (!name || !template_type || !push_category_uuid || !relation_uuids) {
+      return res.status(400).json({
+        error: 'Invalid request',
+        message: 'name, template_type, push_category_uuid, and relation_uuids are required',
+      });
+    }
+
+    if (!Array.isArray(relation_uuids)) {
+      return res.status(400).json({
+        error: 'Invalid request',
+        message: 'relation_uuids must be an array',
+      });
+    }
+
+    const client = await getSDKClient();
+    const vault = await client.createVault(
+      workspaceUuid,
+      name,
+      template_type,
+      push_category_uuid,
+      relation_uuids
+    );
+    res.json(vault);
+  } catch (error: any) {
+    logger.error('Error creating vault:', error);
+    res.status(error?.response?.status || 500).json({
+      error: 'Failed to create vault',
+      message: error.message,
+    });
+  }
+});
+
+/**
+ * @swagger
+ * /api/workspaces/{workspaceUuid}/vaults/{vaultId}/share:
+ *   post:
+ *     summary: Share a vault with a relation
+ *     description: Shares a vault with a relation and processes missing shareable answer content
+ *     tags: [Vaults]
+ *     parameters:
+ *       - $ref: '#/components/parameters/WorkspaceUuid'
+ *       - $ref: '#/components/parameters/VaultId'
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               relation_uuid:
+ *                 type: string
+ *                 description: The UUID of the relation to share with
+ *             required:
+ *               - relation_uuid
+ *           example:
+ *             relation_uuid: "relation-uuid"
+ *     responses:
+ *       200:
+ *         description: Vault shared successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SuccessResponse'
+ *       400:
+ *         description: Invalid request
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ */
+router.post('/:workspaceUuid/vaults/:vaultId/share', async (req: Request, res: Response) => {
+  try {
+    const { workspaceUuid, vaultId } = req.params;
+    const { relation_uuid } = req.body;
+
+    if (!relation_uuid) {
+      return res.status(400).json({
+        error: 'Invalid request',
+        message: 'relation_uuid is required',
+      });
+    }
+
+    const client = await getSDKClient();
+    await client.shareVault(workspaceUuid, vaultId, relation_uuid);
+    res.json({ success: true, message: 'Vault shared successfully' });
+  } catch (error: any) {
+    logger.error('Error sharing vault:', error);
+    res.status(error?.response?.status || 500).json({
+      error: 'Failed to share vault',
+      message: error.message,
+    });
+  }
+});
+
 export default router;
 

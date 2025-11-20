@@ -23,7 +23,7 @@
     "helmet": "^7.1.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
-    "wecan-comply-sdk-js": "^0.1.1",
+    "wecan-comply-sdk-js": "^0.1.2",
     "winston": "^3.11.0"
   },
   "devDependencies": {

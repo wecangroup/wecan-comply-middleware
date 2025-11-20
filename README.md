@@ -120,9 +120,13 @@ The Swagger documentation provides:
 - `GET /api/workspaces/:workspaceUuid/relations` - Get workspace relations
 - `GET /api/workspaces/:workspaceUuid/network` - Get network entries
   - Query: `business_type` (optional)
+- `GET /api/workspaces/:workspaceUuid/push-categories` - Get push categories
+  - Query: `template_type` (optional)
 
 ### Vaults
 - `GET /api/workspaces/:workspaceUuid/vaults` - Get all vaults
+- `POST /api/workspaces/:workspaceUuid/vaults` - Create a new vault
+  - Body: `{ name, template_type, push_category_uuid, relation_uuids }`
 - `GET /api/workspaces/:workspaceUuid/vaults/:vaultId/placeholders` - Get vault placeholders
 - `GET /api/workspaces/:workspaceUuid/vaults/:vaultId/answers` - Get vault answers (decrypted)
 - `PUT /api/workspaces/:workspaceUuid/vaults/:vaultId/answers` - Save vault answers
@@ -130,6 +134,8 @@ The Swagger documentation provides:
   - Query: `mimetype` (required)
 - `POST /api/workspaces/:workspaceUuid/vaults/:vaultId/lock` - Lock vault
 - `POST /api/workspaces/:workspaceUuid/vaults/:vaultId/unlock` - Unlock vault
+- `POST /api/workspaces/:workspaceUuid/vaults/:vaultId/share` - Share vault with a relation
+  - Body: `{ relation_uuid }`
 
 ## Docker Deployment
 

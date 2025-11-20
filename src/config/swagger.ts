@@ -213,6 +213,23 @@ const swaggerDefinition = {
         },
         required: ['success', 'message'],
       },
+      PushCategory: {
+        type: 'object',
+        properties: {
+          uuid: {
+            type: 'string',
+          },
+          label: {
+            type: 'string',
+          },
+          push_template_uuids: {
+            type: 'array',
+            items: {
+              type: 'string',
+            },
+          },
+        },
+      },
     },
     parameters: {
       WorkspaceUuid: {
