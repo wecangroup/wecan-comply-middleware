@@ -10,13 +10,13 @@ A simplified REST API middleware for Wecan Comply that wraps the `wecan-comply-s
 - 🚀 **Express.js**: Fast and reliable web framework
 - 📝 **Winston Logger**: Structured logging with multiple transports
 - ⚙️ **Configuration**: Flexible configuration via JSON files and environment variables
-- 🐳 **Docker Ready**: Containerized with Docker and Docker Compose
+- 🐳 **Docker Ready**: Containerized with Docker and Docker Compose (dev and prod)
 - 🔒 **Security**: Helmet.js for security headers, CORS support
 - 📦 **TypeScript**: Full type safety
 
 ## Prerequisites
 
-- Node.js >= 18
+- Node.js >= 20
 - npm or yarn
 - Docker (optional, for containerized deployment)
 
@@ -57,6 +57,8 @@ A simplified REST API middleware for Wecan Comply that wraps the `wecan-comply-s
 
 ## Development
 
+### Local Development
+
 Run in development mode with hot reload:
 ```bash
 npm run dev
@@ -71,6 +73,26 @@ Run the production build:
 ```bash
 npm start
 ```
+
+### Docker Development
+
+For development and testing in a Docker container with hot-reload:
+
+```bash
+# Start development container
+docker-compose up wecan-comply-middleware-dev
+
+# Or in detached mode
+docker-compose up -d wecan-comply-middleware-dev
+
+# View logs
+docker-compose logs -f wecan-comply-middleware-dev
+
+# Stop container
+docker-compose down
+```
+
+The development container mounts your source code, so changes are automatically reflected with hot-reload.
 
 ## Configuration
 
@@ -159,7 +181,56 @@ The Swagger documentation provides:
 
 ## Docker Deployment
 
-### Build and Run with Docker
+### Development with Docker (Hot-reload)
+
+For development and testing with hot-reload support:
+
+1. Create a `.env` file with your credentials (see `.env.example`)
+
+2. Start the development container:
+   ```bash
+   docker-compose up wecan-comply-middleware-dev
+   ```
+
+   Or run in detached mode:
+   ```bash
+   docker-compose up -d wecan-comply-middleware-dev
+   ```
+
+3. View logs:
+   ```bash
+   docker-compose logs -f wecan-comply-middleware-dev
+   ```
+
+4. The container will automatically reload when you modify files in `src/` or `config/`
+
+5. Stop the service:
+   ```bash
+   docker-compose down
+   ```
+
+### Production with Docker
+
+#### Using Docker Compose
+
+1. Create a `.env` file with your credentials (see `.env.example`)
+
+2. Start the production service:
+   ```bash
+   docker-compose --profile production up -d wecan-comply-middleware
+   ```
+
+3. View logs:
+   ```bash
+   docker-compose logs -f wecan-comply-middleware
+   ```
+
+4. Stop the service:
+   ```bash
+   docker-compose down
+   ```
+
+#### Using Docker directly
 
 1. Build the Docker image:
    ```bash
@@ -172,26 +243,19 @@ The Swagger documentation provides:
      --name wecan-comply-middleware \
      -p 3000:3000 \
      -e WECAN_ACCESS_TOKEN=your_token \
+     -v $(pwd)/logs:/app/logs \
      wecan-comply-middleware
-   ```
-
-### Docker Compose
-
-1. Create a `.env` file with your credentials (see `.env.example`)
-
-2. Start the service:
-   ```bash
-   docker-compose up -d
    ```
 
 3. View logs:
    ```bash
-   docker-compose logs -f
+   docker logs -f wecan-comply-middleware
    ```
 
-4. Stop the service:
+4. Stop the container:
    ```bash
-   docker-compose down
+   docker stop wecan-comply-middleware
+   docker rm wecan-comply-middleware
    ```
 
 ## Logging
