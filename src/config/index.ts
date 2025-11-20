@@ -12,6 +12,11 @@ dotenv.config();
 interface ServerConfig {
   port: number;
   host: string;
+  https?: {
+    enabled: boolean;
+    keyPath?: string;
+    certPath?: string;
+  };
 }
 
 interface WecanComplyConfig {
@@ -46,6 +51,11 @@ export const config: AppConfig = {
   server: {
     port: parseInt(process.env.PORT || String(defaultConfig.server.port), 10),
     host: process.env.HOST || defaultConfig.server.host,
+    https: process.env.HTTPS_ENABLED === 'true' ? {
+      enabled: true,
+      keyPath: process.env.HTTPS_KEY_PATH,
+      certPath: process.env.HTTPS_CERT_PATH,
+    } : undefined,
   },
   wecanComply: {
     workspaceUrlTemplate: process.env.WECAN_WORKSPACE_URL_TEMPLATE || defaultConfig.wecanComply.workspaceUrlTemplate,

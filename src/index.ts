@@ -1,4 +1,7 @@
 import express from 'express';
+import https from 'https';
+import http from 'http';
+import { readFileSync } from 'fs';
 import cors from 'cors';
 import helmet from 'helmet';
 import swaggerUi from 'swagger-ui-express';
@@ -71,19 +74,72 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
 const PORT = config.server.port;
 const HOST = config.server.host;
 
-app.listen(PORT, HOST, () => {
-  logger.info(`Server started on http://${HOST}:${PORT}`);
-  logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
-});
+// HTTPS configuration
+if (config.server.https?.enabled) {
+  const { keyPath, certPath } = config.server.https;
+  
+  if (!keyPath || !certPath) {
+    logger.error('HTTPS is enabled but HTTPS_KEY_PATH and HTTPS_CERT_PATH are not set');
+    process.exit(1);
+  }
 
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  logger.info('SIGTERM received, shutting down gracefully');
-  process.exit(0);
-});
+  try {
+    const httpsOptions = {
+      key: readFileSync(keyPath),
+      cert: readFileSync(certPath),
+    };
 
-process.on('SIGINT', () => {
-  logger.info('SIGINT received, shutting down gracefully');
-  process.exit(0);
-});
+    const httpsServer = https.createServer(httpsOptions, app);
+    httpsServer.listen(PORT, HOST, () => {
+      logger.info(`HTTPS server started on https://${HOST}:${PORT}`);
+      logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+    });
+
+    // Graceful shutdown for HTTPS
+    process.on('SIGTERM', () => {
+      logger.info('SIGTERM received, shutting down HTTPS server gracefully');
+      httpsServer.close(() => {
+        logger.info('HTTPS server closed');
+        process.exit(0);
+      });
+    });
+
+    process.on('SIGINT', () => {
+      logger.info('SIGINT received, shutting down HTTPS server gracefully');
+      httpsServer.close(() => {
+        logger.info('HTTPS server closed');
+        process.exit(0);
+      });
+    });
+  } catch (error: any) {
+    logger.error('Failed to start HTTPS server:', error);
+    logger.error(`Make sure the certificate files exist at: ${keyPath} and ${certPath}`);
+    process.exit(1);
+  }
+} else {
+  // HTTP server (default)
+  const httpServer = http.createServer(app);
+  httpServer.listen(PORT, HOST, () => {
+    logger.info(`HTTP server started on http://${HOST}:${PORT}`);
+    logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`);
+  });
+
+  // Graceful shutdown for HTTP
+  process.on('SIGTERM', () => {
+    logger.info('SIGTERM received, shutting down HTTP server gracefully');
+    httpServer.close(() => {
+      logger.info('HTTP server closed');
+      process.exit(0);
+    });
+  });
+
+  process.on('SIGINT', () => {
+    logger.info('SIGINT received, shutting down HTTP server gracefully');
+    httpServer.close(() => {
+      logger.info('HTTP server closed');
+      process.exit(0);
+    });
+  });
+}
+
 

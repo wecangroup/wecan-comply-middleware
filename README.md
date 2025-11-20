@@ -6,6 +6,7 @@ A simplified REST API middleware for Wecan Comply that wraps the `wecan-comply-s
 
 - 🔐 **Simplified API**: RESTful endpoints that abstract the complexity of the Wecan Comply SDK
 - 📚 **Swagger Documentation**: Interactive API documentation with Swagger UI
+- 🔒 **HTTPS Support**: Optional HTTPS server with SSL/TLS certificate configuration
 - 🚀 **Express.js**: Fast and reliable web framework
 - 📝 **Winston Logger**: Structured logging with multiple transports
 - ⚙️ **Configuration**: Flexible configuration via JSON files and environment variables
@@ -93,14 +94,33 @@ Sensitive configuration should be set via environment variables:
 
 - `WECAN_ACCESS_TOKEN`: Wecan authentication token (required)
 - `PORT`: Server port (overrides config file)
+- `HOST`: Server host (overrides config file)
 - `NODE_ENV`: Environment (development/production)
 - `LOG_LEVEL`: Log level (overrides config file)
 - `WECAN_WORKSPACE_URL_TEMPLATE`: Workspace URL template (overrides config file)
+- `HTTPS_ENABLED`: Enable HTTPS server (set to `true` to enable)
+- `HTTPS_KEY_PATH`: Path to the private key file (required if HTTPS_ENABLED=true)
+- `HTTPS_CERT_PATH`: Path to the certificate file (required if HTTPS_ENABLED=true)
+
+## HTTPS Configuration
+
+To enable HTTPS, set the following environment variables:
+
+```env
+HTTPS_ENABLED=true
+HTTPS_KEY_PATH=/path/to/private-key.pem
+HTTPS_CERT_PATH=/path/to/certificate.pem
+```
+
+The server will automatically use HTTPS when `HTTPS_ENABLED=true` and both certificate paths are provided. If HTTPS is not enabled, the server will run on HTTP (default behavior).
+
+**Note**: Make sure the certificate files are readable by the application and have the correct permissions.
 
 ## API Documentation
 
 Interactive API documentation is available via Swagger UI at:
-- **Development**: `http://localhost:3000/api-docs`
+- **Development (HTTP)**: `http://localhost:3000/api-docs`
+- **Development (HTTPS)**: `https://localhost:3000/api-docs`
 
 The Swagger documentation provides:
 - Complete API endpoint descriptions
