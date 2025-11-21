@@ -328,18 +328,16 @@ Docker images are automatically built and published to GitHub Container Registry
 - A Git tag is created (e.g., `v0.1.0`)
 - Manual workflow dispatch is triggered
 
-**Important**: Docker image tags are automatically generated from the `version` field in `package.json`. For example, if `package.json` contains `"version": "0.1.0"`, the following tags will be created:
-- `v0.1.0` - Version with 'v' prefix
-- `0.1.0` - Exact version
-- `0.1` - Major.minor version
-- `0` - Major version only
+**Important**: Docker image tags are automatically generated from the `version` field in `package.json`. For example, if `package.json` contains `"version": "0.1.1"`, the following tags will be created:
+- `v0.1.1` - Version with 'v' prefix
+- `0.1.1` - Exact version
 - `latest` - Always points to the latest published version
 
 The published images are available at:
 ```
 ghcr.io/wecangroup/wecan-comply-middleware:latest
-ghcr.io/wecangroup/wecan-comply-middleware:v0.1.0
-ghcr.io/wecangroup/wecan-comply-middleware:0.1.0
+ghcr.io/wecangroup/wecan-comply-middleware:v0.1.1
+ghcr.io/wecangroup/wecan-comply-middleware:0.1.1
 ```
 
 ### Manual Publishing

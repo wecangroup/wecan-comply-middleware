@@ -22,12 +22,10 @@ The workflow uses the `GITHUB_TOKEN` which is automatically provided by GitHub A
 
 ## Image Tags
 
-The workflow automatically creates multiple tags based on the `version` field in `package.json`. For example, if `package.json` contains `"version": "0.1.0"`, the following tags will be created:
+The workflow automatically creates tags based on the `version` field in `package.json`. For example, if `package.json` contains `"version": "0.1.1"`, the following tags will be created:
 
-- `v0.1.0` - Version with 'v' prefix (e.g., `v0.1.0`)
-- `0.1.0` - Exact version from package.json (e.g., `0.1.0`)
-- `0.1` - Major.minor version (e.g., `0.1`)
-- `0` - Major version only (e.g., `0`)
+- `v0.1.1` - Version with 'v' prefix
+- `0.1.1` - Exact version from package.json
 - `latest` - Always points to the latest published version
 
 **Note**: To update the Docker image version, update the `version` field in `package.json` and commit the change before triggering the workflow.

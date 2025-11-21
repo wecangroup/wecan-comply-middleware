@@ -27,9 +27,6 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "version_v=v$VERSION" >> $GITHUB_OUTPUT
-          echo "major=$(echo $VERSION | cut -d. -f1)" >> $GITHUB_OUTPUT
-          echo "minor=$(echo $VERSION | cut -d. -f2)" >> $GITHUB_OUTPUT
-          echo "major_minor=$(echo $VERSION | cut -d. -f1-2)" >> $GITHUB_OUTPUT
           echo "Package version: $VERSION"
 
       - name: Set up Docker Buildx
@@ -50,8 +47,6 @@ jobs:
           tags: |
             type=raw,value=${{ steps.package-version.outputs.version_v }}
             type=raw,value=${{ steps.package-version.outputs.version }}
-            type=raw,value=${{ steps.package-version.outputs.major_minor }}
-            type=raw,value=${{ steps.package-version.outputs.major }}
             type=raw,value=latest
 
       - name: Build and push Docker image
