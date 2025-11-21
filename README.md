@@ -4,7 +4,7 @@ A simplified REST API middleware for Wecan Comply that wraps the [`wecan-comply-
 
 ## Features
 
-- 🔐 **Simplified API**: RESTful endpoints that abstract the complexity of the Wecan Comply API
+- 🔐 **Simplified API**: RESTful endpoints that abstract the complexity of the [Wecan Comply API](https://wecan.atlassian.net/wiki/external/ZWYxZWNkZWEwNzk5NDYxMmExMWM2M2EzOTNiNTIwN2U)
 - 📚 **Swagger Documentation**: Interactive API documentation with Swagger UI
 - 🔒 **HTTPS Support**: Optional HTTPS server with SSL/TLS certificate configuration
 - 🚀 **Express.js**: Fast and reliable web framework
