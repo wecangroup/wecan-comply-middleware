@@ -1,6 +1,6 @@
 {
   "name": "wecan-comply-middleware",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Simplified REST API middleware for Wecan Comply using the wecan-comply-sdk",
   "license": "MIT",
   "author": "Wecan Group",
