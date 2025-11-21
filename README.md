@@ -11,6 +11,7 @@ A simplified REST API middleware for Wecan Comply that wraps the `wecan-comply-s
 - 📝 **Winston Logger**: Structured logging with multiple transports
 - ⚙️ **Configuration**: Flexible configuration via JSON files and environment variables
 - 🐳 **Docker Ready**: Containerized with Docker and Docker Compose (dev and prod)
+- 📦 **Published to GHCR**: Docker images available on GitHub Container Registry
 - 🔒 **Security**: Helmet.js for security headers, CORS support
 - 📦 **TypeScript**: Full type safety
 
@@ -181,6 +182,31 @@ The Swagger documentation provides:
 
 ## Docker Deployment
 
+### Using Pre-built Image from GitHub Container Registry
+
+The Docker image is automatically published to GitHub Container Registry on each release. You can pull and use it directly:
+
+```bash
+# Pull the latest image
+docker pull ghcr.io/wecangroup/wecan-comply-middleware:latest
+
+# Or pull a specific version
+docker pull ghcr.io/wecangroup/wecan-comply-middleware:v0.1.0
+
+# Run the container
+docker run -d \
+  --name wecan-comply-middleware \
+  -p 3000:3000 \
+  -e WECAN_ACCESS_TOKEN=your_token \
+  -v $(pwd)/logs:/app/logs \
+  ghcr.io/wecangroup/wecan-comply-middleware:latest
+```
+
+**Note**: If the image is private, you'll need to authenticate first:
+```bash
+echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
+```
+
 ### Development with Docker (Hot-reload)
 
 For development and testing with hot-reload support:
@@ -291,6 +317,38 @@ HTTP status codes:
 - All routes are async and handle errors automatically
 - Request/response logging is enabled by default
 - Health check endpoint verifies SDK client initialization
+
+## Publishing Docker Images
+
+Docker images are automatically built and published to GitHub Container Registry (GHCR) on:
+- Push to `main` or `master` branch
+- Creation of version tags (e.g., `v0.1.0`)
+- Manual workflow dispatch
+
+The published image is available at:
+```
+ghcr.io/wecangroup/wecan-comply-middleware:latest
+ghcr.io/wecangroup/wecan-comply-middleware:v0.1.0
+```
+
+### Manual Publishing
+
+To manually publish a Docker image:
+
+1. Build the image:
+   ```bash
+   docker build -t ghcr.io/wecangroup/wecan-comply-middleware:latest .
+   ```
+
+2. Login to GitHub Container Registry:
+   ```bash
+   echo $GITHUB_TOKEN | docker login ghcr.io -u YOUR_USERNAME --password-stdin
+   ```
+
+3. Push the image:
+   ```bash
+   docker push ghcr.io/wecangroup/wecan-comply-middleware:latest
+   ```
 
 ## License
 
