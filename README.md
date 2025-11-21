@@ -1,19 +1,16 @@
 # Wecan Comply Middleware
 
-A simplified REST API middleware for Wecan Comply that wraps the `wecan-comply-sdk` to provide a clean HTTP interface.
+A simplified REST API middleware for Wecan Comply that wraps the [`wecan-comply-sdk-js`](https://github.com/wecangroup/wecan-comply-sdk) to provide a clean HTTP interface.
 
 ## Features
 
-- 🔐 **Simplified API**: RESTful endpoints that abstract the complexity of the Wecan Comply SDK
+- 🔐 **Simplified API**: RESTful endpoints that abstract the complexity of the Wecan Comply API
 - 📚 **Swagger Documentation**: Interactive API documentation with Swagger UI
 - 🔒 **HTTPS Support**: Optional HTTPS server with SSL/TLS certificate configuration
 - 🚀 **Express.js**: Fast and reliable web framework
-- 📝 **Winston Logger**: Structured logging with multiple transports
 - ⚙️ **Configuration**: Flexible configuration via JSON files and environment variables
 - 🐳 **Docker Ready**: Containerized with Docker and Docker Compose (dev and prod)
 - 📦 **Published to GHCR**: Docker images available on GitHub Container Registry
-- 🔒 **Security**: Helmet.js for security headers, CORS support
-- 📦 **TypeScript**: Full type safety
 
 ## Prerequisites
 
@@ -38,7 +35,7 @@ A simplified REST API middleware for Wecan Comply that wraps the `wecan-comply-s
    cp .env.example .env
    ```
 
-4. Edit `.env` and fill in your sensitive credentials:
+4. Edit `.env` and fill in your sensitive credentials (Wecan Comply External Access Token):
    ```env
    WECAN_ACCESS_TOKEN=your_wecan_token_here
    ```
@@ -202,15 +199,6 @@ docker run -d \
   ghcr.io/wecangroup/wecan-comply-middleware:latest
 ```
 
-**Note**: By default, images are private. To make them public:
-1. Go to your repository → **Packages** → `wecan-comply-middleware` → **Package settings**
-2. Scroll to **Danger Zone** → **Change visibility** → **Make public**
-
-Or authenticate to use private images:
-```bash
-echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
-```
-
 ### Development with Docker (Hot-reload)
 
 For development and testing with hot-reload support:
@@ -314,13 +302,6 @@ HTTP status codes:
 - `404`: Not Found
 - `500`: Internal Server Error
 - `503`: Service Unavailable (health check)
-
-## Development Tips
-
-- The SDK client is initialized lazily on first use
-- All routes are async and handle errors automatically
-- Request/response logging is enabled by default
-- Health check endpoint verifies SDK client initialization
 
 ## Publishing Docker Images
 
