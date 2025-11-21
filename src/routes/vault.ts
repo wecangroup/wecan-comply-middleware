@@ -509,4 +509,3 @@ router.post('/:workspaceUuid/vaults/:vaultId/share', async (req: Request, res: R
 });
 
 export default router;
-

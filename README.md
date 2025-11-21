@@ -113,6 +113,8 @@ Non-sensitive configuration can be set in `config/default.json`:
 Sensitive configuration should be set via environment variables:
 
 - `WECAN_ACCESS_TOKEN`: Wecan authentication token (required)
+- `WECAN_WORKSPACE_KEYS`: JSON array of workspace keys for encryption/decryption (optional, required for vault operations)
+  - Format: `[{"workspaceUuid": "uuid-1", "privateKey": "-----BEGIN PGP PRIVATE KEY BLOCK-----..."}, ...]`
 - `PORT`: Server port (overrides config file)
 - `HOST`: Server host (overrides config file)
 - `NODE_ENV`: Environment (development/production)
@@ -121,6 +123,8 @@ Sensitive configuration should be set via environment variables:
 - `HTTPS_ENABLED`: Enable HTTPS server (set to `true` to enable)
 - `HTTPS_KEY_PATH`: Path to the private key file (required if HTTPS_ENABLED=true)
 - `HTTPS_CERT_PATH`: Path to the certificate file (required if HTTPS_ENABLED=true)
+
+**Note**: `WECAN_WORKSPACE_KEYS` is required for operations that involve encryption/decryption (e.g., `getVaultAnswers`, `saveVaultAnswers`, `downloadVaultFile`, `shareVault`). Without it, these operations will fail.
 
 ## HTTPS Configuration
 

@@ -75,5 +75,6 @@ export const config: AppConfig = {
 // Sensitive values from environment
 export const sensitiveConfig = {
   accessToken: process.env.WECAN_ACCESS_TOKEN,
+  // workspaceKeys are parsed in sdk-client.ts to avoid circular dependencies
 };
 
