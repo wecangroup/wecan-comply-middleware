@@ -202,7 +202,11 @@ docker run -d \
   ghcr.io/wecangroup/wecan-comply-middleware:latest
 ```
 
-**Note**: If the image is private, you'll need to authenticate first:
+**Note**: By default, images are private. To make them public:
+1. Go to your repository → **Packages** → `wecan-comply-middleware` → **Package settings**
+2. Scroll to **Danger Zone** → **Change visibility** → **Make public**
+
+Or authenticate to use private images:
 ```bash
 echo $GITHUB_TOKEN | docker login ghcr.io -u USERNAME --password-stdin
 ```

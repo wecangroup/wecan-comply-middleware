@@ -33,28 +33,34 @@ The workflow creates multiple tags for each image:
 
 ## Using Published Images
 
-### Public Repository
+### Important: Images are Private by Default
 
-If your repository is public, images are automatically public and can be pulled without authentication:
+**By default, all images published to GitHub Container Registry are private**, regardless of whether your repository is public or private. You must explicitly make them public to allow unauthenticated pulls.
+
+### Making Images Public
+
+To make your Docker images publicly accessible:
+
+1. Go to your repository on GitHub (e.g., `https://github.com/wecangroup/wecan-comply-middleware`)
+2. Click on **Packages** in the right sidebar (or go to `https://github.com/orgs/wecangroup/packages`)
+3. Find and click on the package `wecan-comply-middleware`
+4. Click on **Package settings** (gear icon on the right)
+5. Scroll down to **Danger Zone**
+6. Click **Change visibility** → **Make public**
+7. Confirm the change
+
+**Note**: You need to be an owner or have admin permissions on the repository/organization to change package visibility.
+
+### Using Private Images (Alternative)
+
+If you prefer to keep images private, authenticate first:
 
 ```bash
-docker pull ghcr.io/wecangroup/wecan-comply-middleware:latest
-```
-
-### Private Repository
-
-If your repository is private, images are private by default. To make them public:
-
-1. Go to your repository on GitHub
-2. Click on **Packages** (right sidebar)
-3. Click on the package `wecan-comply-middleware`
-4. Go to **Package settings**
-5. Scroll down to **Danger Zone** → **Change visibility** → **Make public**
-
-Or to use private images, authenticate first:
-
-```bash
+# Create a Personal Access Token (PAT) with `read:packages` permission
+# Then login:
 echo $GITHUB_TOKEN | docker login ghcr.io -u YOUR_USERNAME --password-stdin
+
+# Now you can pull:
 docker pull ghcr.io/wecangroup/wecan-comply-middleware:latest
 ```
 
@@ -95,9 +101,16 @@ The workflow builds images for `linux/amd64` architecture, making them compatibl
 - Check the **Packages** section of your repository
 - Verify the image name matches: `ghcr.io/wecangroup/wecan-comply-middleware`
 
-### Cannot pull private image
+### Cannot pull image - "denied" error
 
-- Make sure you're authenticated: `docker login ghcr.io`
-- Verify your token has `read:packages` permission
-- Check that the package visibility allows your access
+This error means the image is private. You have two options:
+
+1. **Make the image public** (recommended for public repositories):
+   - Go to your repository → **Packages** → `wecan-comply-middleware` → **Package settings**
+   - Scroll to **Danger Zone** → **Change visibility** → **Make public**
+
+2. **Authenticate to use private images**:
+   - Create a Personal Access Token (PAT) with `read:packages` permission
+   - Login: `echo $GITHUB_TOKEN | docker login ghcr.io -u YOUR_USERNAME --password-stdin`
+   - Then pull: `docker pull ghcr.io/wecangroup/wecan-comply-middleware:latest`
 
