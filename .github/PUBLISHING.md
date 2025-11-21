@@ -74,11 +74,13 @@ echo $GITHUB_TOKEN | docker login ghcr.io -u YOUR_USERNAME --password-stdin
 docker push ghcr.io/wecangroup/wecan-comply-middleware:latest
 ```
 
-## Multi-Architecture Support
+## Architecture Support
 
-The workflow builds images for both `linux/amd64` and `linux/arm64` architectures, making them compatible with:
+The workflow builds images for `linux/amd64` architecture, making them compatible with:
 - Intel/AMD processors (amd64)
-- Apple Silicon and ARM-based servers (arm64)
+- Most cloud providers and servers
+
+**Note**: ARM64 support can be added later if needed using native ARM64 runners or improved QEMU configuration.
 
 ## Troubleshooting
 
